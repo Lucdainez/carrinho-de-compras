@@ -27,7 +27,7 @@ const createProductItemElement = ({ sku, name, image }) => {
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
 const cartItemClickListener = (event) => {
-  // coloque seu código aqui
+  document.querySelector('.cart__item').remove();
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
@@ -57,5 +57,6 @@ const addProductToCart = async () => {
     ol.appendChild(create);
 };
 addProductToCart();
+getSkuFromProductItem();
 
 window.onload = () => { loadElementsInHtml(); };
