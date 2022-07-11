@@ -49,4 +49,13 @@ const loadElementsInHtml = async () => {
   });
 };
 
+const addProductToCart = async () => {
+  const data = await fetchItem('MLB1341706310');
+    const { id, title, price } = data;
+    const create = createCartItemElement({ sku: id, name: title, salePrice: price });
+    const ol = document.querySelector('.cart__items');
+    ol.appendChild(create);
+};
+addProductToCart();
+
 window.onload = () => { loadElementsInHtml(); };
