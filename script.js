@@ -1,3 +1,5 @@
+const olElement = document.querySelector('.cart__items');
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -26,8 +28,9 @@ const createProductItemElement = ({ sku, name, image }) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = () => {
-  document.querySelector('.cart__item').remove();
+const cartItemClickListener = (event) => {
+  olElement.removeChild(event.target);
+  saveCartItems(olElement.innerHTML);
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
@@ -39,8 +42,7 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 };
 
 const addLi = (add) => {
-  const ol = document.querySelector('.cart__items');
-  ol.appendChild(add);
+  olElement.appendChild(add);
 };
 
 const addOneProductToCart = () => {
@@ -52,9 +54,18 @@ const addOneProductToCart = () => {
       const { id, title, price } = requisition;
       const li = createCartItemElement({ sku: id, name: title, salePrice: price });
       addLi(li);
+      saveCartItems(olElement.innerHTML);
     });
   });
 };
+
+const removeAllLiForCart = () => {
+  const buttonRemove = document.querySelector('.empty-cart');
+  buttonRemove.addEventListener('click', () => {
+    olElement.innerHTML = '';
+  });
+};
+removeAllLiForCart();
 
 const loadElementsInHtml = async () => {
   const data = await fetchProducts('computador');
@@ -68,10 +79,37 @@ const loadElementsInHtml = async () => {
   addOneProductToCart();
 };
 
+const returnStorage = () => {
+  const storage = getSavedCartItems();
+  olElement.innerHTML = storage;
+};
+
+const getAllEvents = () => {
+  const liRemove = document.querySelectorAll('.cart__item');
+  liRemove.forEach((element) => {
+    element.addEventListener('click', cartItemClickListener);
+  });
+};
+
+const restart = () => {
+  const sectionClassItem = document.querySelector('.items');
+  sectionClassItem.style.display = 'none';
+  olElement.style.display = 'none';
+  const createSpan = document.createElement('h1');
+  createSpan.innerText = 'carregando...';
+  createSpan.classList = 'loading';
+  const body = document.querySelector('body');
+  body.appendChild(createSpan);
+  setTimeout(async () => {
+    sectionClassItem.style.display = 'flex';
+    olElement.style.display = 'flex';
+    await loadElementsInHtml();
+    body.removeChild(createSpan);
+    returnStorage();
+    getAllEvents();
+  });
+};
+
 window.onload = () => {
-  loadElementsInHtml();
-  // const buttonRemove = document.querySelector('.empty-cart');
-  // buttonRemove.addEventListener('click', () => {
-  //   console.log('ola');
-  // });
+  restart();
 };
