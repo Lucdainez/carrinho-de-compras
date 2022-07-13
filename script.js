@@ -26,7 +26,7 @@ const createProductItemElement = ({ sku, name, image }) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = (event) => {
+const cartItemClickListener = () => {
   document.querySelector('.cart__item').remove();
 };
 
@@ -43,7 +43,7 @@ const addLi = (add) => {
   ol.appendChild(add);
 };
 
-const addProductToCart = () => {
+const addOneProductToCart = () => {
   const sectionButton = document.querySelectorAll('.item__add');
   sectionButton.forEach((element) => {
     element.addEventListener('click', async (event) => {
@@ -65,7 +65,7 @@ const loadElementsInHtml = async () => {
     sectionFather.appendChild(create);
     return true;
   });
-  addProductToCart();
+  addOneProductToCart();
 };
 
 window.onload = () => {
