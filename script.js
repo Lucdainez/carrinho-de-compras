@@ -38,6 +38,24 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
+const addLi = (add) => {
+  const ol = document.querySelector('.cart__items');
+  ol.appendChild(add);
+};
+
+const addProductToCart = () => {
+  const sectionButton = document.querySelectorAll('.item__add');
+  sectionButton.forEach((element) => {
+    element.addEventListener('click', async (event) => {
+      const span = getSkuFromProductItem(event.target.parentNode);
+      const requisition = await fetchItem(span);
+      const { id, title, price } = requisition;
+      const li = createCartItemElement({ sku: id, name: title, salePrice: price });
+      addLi(li);
+    });
+  });
+};
+
 const loadElementsInHtml = async () => {
   const data = await fetchProducts('computador');
   data.results.map((computer) => {
@@ -47,16 +65,13 @@ const loadElementsInHtml = async () => {
     sectionFather.appendChild(create);
     return true;
   });
+  addProductToCart();
 };
 
-const addProductToCart = async () => {
-  const data = await fetchItem('MLB1341706310');
-    const { id, title, price } = data;
-    const create = createCartItemElement({ sku: id, name: title, salePrice: price });
-    const ol = document.querySelector('.cart__items');
-    ol.appendChild(create);
+window.onload = () => {
+  loadElementsInHtml();
+  // const buttonRemove = document.querySelector('.empty-cart');
+  // buttonRemove.addEventListener('click', () => {
+  //   console.log('ola');
+  // });
 };
-addProductToCart();
-getSkuFromProductItem();
-
-window.onload = () => { loadElementsInHtml(); };
