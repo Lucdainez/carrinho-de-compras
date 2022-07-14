@@ -28,9 +28,22 @@ const createProductItemElement = ({ sku, name, image }) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
+const totalPriceToCart = () => {
+  let value = 0;
+  olElement.childNodes.forEach((element) => {
+    const strLi = element.innerText;
+    const strValue = Number(strLi.split('$')[1]);
+    value += strValue;
+  });
+  const total = Math.round((value + Number.EPSILON) * 100) / 100;
+  const pTotalCartValue = document.querySelector('.total-price');
+  pTotalCartValue.innerText = total;
+};
+
 const cartItemClickListener = (event) => {
   olElement.removeChild(event.target);
   saveCartItems(olElement.innerHTML);
+  totalPriceToCart();
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
@@ -55,6 +68,7 @@ const addOneProductToCart = () => {
       const li = createCartItemElement({ sku: id, name: title, salePrice: price });
       addLi(li);
       saveCartItems(olElement.innerHTML);
+      totalPriceToCart();
     });
   });
 };
@@ -63,6 +77,8 @@ const removeAllLiForCart = () => {
   const buttonRemove = document.querySelector('.empty-cart');
   buttonRemove.addEventListener('click', () => {
     olElement.innerHTML = '';
+    saveCartItems(olElement.innerHTML);
+    totalPriceToCart();
   });
 };
 removeAllLiForCart();
@@ -94,7 +110,6 @@ const getAllEvents = () => {
 const restart = () => {
   const sectionClassItem = document.querySelector('.items');
   sectionClassItem.style.display = 'none';
-  olElement.style.display = 'none';
   const createSpan = document.createElement('h1');
   createSpan.innerText = 'carregando...';
   createSpan.classList = 'loading';
@@ -102,14 +117,12 @@ const restart = () => {
   body.appendChild(createSpan);
   setTimeout(async () => {
     sectionClassItem.style.display = 'flex';
-    olElement.style.display = 'flex';
     await loadElementsInHtml();
     body.removeChild(createSpan);
     returnStorage();
     getAllEvents();
+    totalPriceToCart();
   });
 };
 
-window.onload = () => {
-  restart();
-};
+window.onload = () => { restart(); };
