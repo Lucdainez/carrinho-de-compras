@@ -112,6 +112,15 @@ body {
   margin: 40px 0;
 }
 
+.cart__item {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  align-content: flex-start;
+  align-items: center;
+}
+
+
 .item {
   display: flex;
   flex-direction: column;

@@ -53,10 +53,10 @@ const cartItemClickListener = (event) => {
   quantityOfProductsInCart();
 };
 
-const createCartItemElement = ({ sku, name, salePrice }) => {
+const createCartItemElement = (name, salePrice) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.innerText = ` ${name} $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 };
@@ -71,8 +71,9 @@ const addOneProductToCart = () => {
     element.addEventListener('click', async (event) => {
       const span = getSkuFromProductItem(event.target.parentNode);
       const requisition = await fetchItem(span);
-      const { id, title, price } = requisition;
-      const li = createCartItemElement({ sku: id, name: title, salePrice: price });
+      const { title, price, thumbnail } = requisition;
+      const li = createCartItemElement(title, price);
+      li.appendChild(createProductImageElement(thumbnail));
       addLi(li);
       saveCartItems(olElement.innerHTML);
       totalPriceToCart();
