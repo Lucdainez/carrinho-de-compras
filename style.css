@@ -46,8 +46,8 @@ body {
   content: '';
   position: absolute;
   top: 15px;
-  right: 61.5%;
-  width: 39.5%;
+  right: 97.5%;
+  width: 3.5%;
   height: 15px;
   background: rgb(10, 118, 79);
   transform: skew(-45deg);
@@ -58,8 +58,8 @@ body {
   content: '';
   position: absolute;
   top: 30px;
-  right: 61.5%;
-  width: 39.5%;
+  right: 97.5%;
+  width: 3.5%;
   height: 15px;
   background: rgb(10, 118, 79);
   transform: skew(45deg);
@@ -69,8 +69,21 @@ body {
 .container-cartTitle .cart__title {
   color: white;
   font-size: 20px;
-  padding-left: 35px;
+  padding: 5px;
   font-weight: 700;
+}
+
+.cart__title {
+  margin-left: 25%;
+  text-align: center;
+  border: 1px solid white;
+
+}
+
+.cart__title:hover {
+  -moz-transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .container {

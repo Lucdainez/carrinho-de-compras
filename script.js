@@ -107,6 +107,21 @@ const getAllEvents = () => {
   });
 };
 
+const clickInClassCartTitle = () => {
+  const sectionClassCart = document.querySelector('.cart');
+  if (sectionClassCart.style.display !== 'flex') {
+    return sectionClassCart.style.display = 'flex';
+  } else if (sectionClassCart.style.display !== 'none') {
+    return sectionClassCart.style.display = 'none';
+  }
+};
+
+const eventToClassCartTitle = () => {
+  const meuCarrinho = document.querySelector('.cart__title');
+  console.log(meuCarrinho);
+  meuCarrinho.addEventListener('click', clickInClassCartTitle);
+};
+
 const restart = () => {
   const sectionClassItem = document.querySelector('.items');
   sectionClassItem.style.display = 'none';
@@ -122,6 +137,7 @@ const restart = () => {
     returnStorage();
     getAllEvents();
     totalPriceToCart();
+    eventToClassCartTitle();
   });
 };
 
