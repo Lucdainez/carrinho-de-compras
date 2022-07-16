@@ -20,13 +20,15 @@ const quantityOfProductsInCart = () => {
   spanQuantity.innerHTML = olElement.children.length;
 };
 
-const createProductItemElement = ({ sku, name, image }) => {
+const createProductItemElement = ({ sku, name, image, price }) => {
   const section = document.createElement('section');
   section.className = 'item';
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createCustomElement('span', 'item__price', price
+    .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })))
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
@@ -37,13 +39,12 @@ const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').inn
 const totalPriceToCart = () => {
   let value = 0;
   olElement.childNodes.forEach((element) => {
-    const strLi = element.innerText;
-    const strValue = Number(strLi.split('$')[1]);
-    value += strValue;
+    const strLi = element.firstElementChild.innerText;
+    const clear = strLi.replace(/[^0-9,]*/g, '').replace(',', '.');
+    value += Number(clear);
   });
-  const total = Math.round((value + Number.EPSILON) * 100) / 100;
   const pTotalCartValue = document.querySelector('.total-price');
-  pTotalCartValue.innerText = total;
+  pTotalCartValue.innerText = value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
 };
 
 const cartItemClickListener = (event) => {
@@ -56,7 +57,8 @@ const cartItemClickListener = (event) => {
 const createCartItemElement = (name, salePrice) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = ` ${name} $${salePrice}`;
+  li.innerHTML = ` ${name} <strong>${salePrice
+    .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</strong>`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 };
@@ -96,8 +98,8 @@ removeAllLiForCart();
 const loadElementsInHtml = async () => {
   const data = await fetchProducts('computador');
   data.results.map((computer) => {
-    const { id, title, thumbnail } = computer;
-    const create = createProductItemElement({ sku: id, name: title, image: thumbnail });
+    const { id, title, thumbnail, price } = computer;
+    const create = createProductItemElement({ sku: id, name: title, image: thumbnail, price: price });
     const sectionFather = document.querySelector('.items');
     sectionFather.appendChild(create);
     return true;
